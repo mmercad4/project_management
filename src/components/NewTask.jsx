@@ -1,8 +1,16 @@
-const NewTask = () => {
+import { useState } from "react";
+
+const NewTask = ({ onAdd }) => {
   const [enteredTask, setEnteredTask] = useState();
 
   const handleChange = (event) => {
     setEnteredTask(event.target.value);
+  };
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    onAdd(enteredTask);
+    setEnteredTask("");
   };
 
   return (
@@ -13,7 +21,10 @@ const NewTask = () => {
         onChange={handleChange}
         value={enteredTask}
       />
-      <button className="text-stone-700 hover:text-stone-950">
+      <button
+        className="text-stone-700 hover:text-stone-950"
+        onClick={handleClick}
+      >
         + Add Task
       </button>
     </div>

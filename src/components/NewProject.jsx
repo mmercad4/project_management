@@ -1,8 +1,11 @@
 import { useRef } from "react";
 
 import { Input } from "./Input";
+import { Modal } from "./Modal";
 
 const NewProject = ({ onAddProject }) => {
+  const modal = useRef();
+
   const title = useRef();
   const description = useRef();
   const dueDate = useRef();
@@ -12,7 +15,16 @@ const NewProject = ({ onAddProject }) => {
     const enteredDescription = description.current.value;
     const enteredDueDate = dueDate.current.value;
 
-    //validation ....
+    if (
+      enteredTitle.trim() === "" ||
+      enteredDescription.trim() === "" ||
+      enteredDueDate.trim() === ""
+    ) {
+      modal.current.open();
+      return;
+    }
+
+    //show error modal
 
     onAddProject({
       title: enteredTitle,
@@ -22,28 +34,35 @@ const NewProject = ({ onAddProject }) => {
   };
 
   return (
-    <div className="w-[35rem] mt-16">
-      <menu className="flex items-center justify-end gap-4 my-4">
-        <li>
-          <button className="text-stone-800 hover:text-stone-950">
-            Cancel
-          </button>
-        </li>
-        <li>
-          <button
-            className="px-6 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950"
-            onClick={handleSave}
-          >
-            Save
-          </button>
-        </li>
-      </menu>
-      <div>
-        <Input type="text" ref={title} label="Title" />
-        <Input ref={description} label="Description" textarea />
-        <Input type="date" ref={dueDate} label="Due Date" />
+    <>
+      <Modal ref={modal} buttonCaption="Okay">
+        <h2>Invalid Input</h2>
+        <p>Oops... looks like you forgoet to enter a value.</p>
+        <p>Please make sure you enter a valid value for all input fields</p>
+      </Modal>
+      <div className="w-[35rem] mt-16">
+        <menu className="flex items-center justify-end gap-4 my-4">
+          <li>
+            <button className="text-stone-800 hover:text-stone-950">
+              Cancel
+            </button>
+          </li>
+          <li>
+            <button
+              className="px-6 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950"
+              onClick={handleSave}
+            >
+              Save
+            </button>
+          </li>
+        </menu>
+        <div>
+          <Input type="text" ref={title} label="Title" />
+          <Input ref={description} label="Description" textarea />
+          <Input type="date" ref={dueDate} label="Due Date" />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
